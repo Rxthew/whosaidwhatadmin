@@ -97,22 +97,21 @@ const Main = function(){
                 {
                   user || (
                     <Typography  align='center' component='h2' variant='h5'>
-                      This is the administration frontend for WhoSaidWhat. 
-                      Please 
-                      <Link component={MainLink} to={'/login'}>
-                        log in
-                      </Link> or 
+                      This is the administration frontend for WhoSaidWhat.
+                      Please <Link component={MainLink} to={'/login'}>
+                           log in
+                       </Link> or 
                       <Link component={MainLink} to={'/signup'}
-                      >sign up
+                      > sign up
                       </Link> to gain access.
                     </Typography>
                     ) 
                 }
                 {  
-                 userAdmin || (
+                  !user || userAdmin || (
                   <Typography  align='center' component='h2' variant='h5'>
-                    It looks like you do not have administrative privileges to access this page. You can 
-                      <Link component={MainLink} to={`user/${user?._id}`}>
+                    It looks like you do not have administrative privileges to access this page.
+                    You can <Link component={MainLink} to={`user/${user?._id}`}>
                         update your membership
                       </Link> to admin to gain access.
                   </Typography>
