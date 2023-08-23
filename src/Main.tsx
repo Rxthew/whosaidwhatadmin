@@ -8,8 +8,9 @@ import Container from '@mui/material/Container';
 import Comment from '@mui/icons-material/Comment'
 import CssBaseline  from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import { Link as PostLink } from 'react-router-dom';
+import { Link as MainLink } from 'react-router-dom';
 import { useIndexData, useLoadingState } from './helpers/hooks';
 import { CommentsType } from './helpers/types';
 import { regulariseDate } from './helpers/utils';
@@ -39,7 +40,7 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
 
   return (
     <Grid item xs={12} md={6}>
-      <CardActionArea component={PostLink} to={`/post/${post._id}`}>
+      <CardActionArea component={MainLink} to={`/post/${post._id}`}>
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography component="h2" variant="h5">
@@ -69,11 +70,15 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
 
 const Main = function(){
 
-   const { posts } = useIndexData()
+   const { posts, user } = useIndexData()
    const { loading } = useLoadingState();
+   const onlyPostsNotLoaded = !posts && user && loading === false;
+   const postsAreEmpty = posts && posts.length === 0 && loading === false;
    const postsAreLoaded = posts && posts.length > 0 && loading === false;
-   const noPostsLoaded = (!posts || posts.length === 0) && loading === false;
+   const userNotLoaded = !user && loading === false;
    
+   
+
     return (
         <>
         <CssBaseline />
@@ -92,8 +97,14 @@ const Main = function(){
                   })}
                 </Grid>
             )}
-            { noPostsLoaded && (
-            <Typography  align='center' component='h2' variant='h5'>There are no posts to show at this time.</Typography>
+             { postsAreEmpty && (
+            <Typography  align='center' component='h2' variant='h5'>You have not written any posts yet.</Typography>
+            )}
+            { userNotLoaded && (
+              <Typography  align='center' component='h2' variant='h5'>This is the administration frontend for WhoSaidWhat. Please <Link component={MainLink} to={'/login'}>log in</Link> or <Link component={MainLink} to={'/signup'}>sign up</Link> to gain access.</Typography>
+              )}
+            { onlyPostsNotLoaded && (
+            <Typography  align='center' component='h2' variant='h5'> Posts data has not been retrieved from API.</Typography>
             )}
             
           </main>
