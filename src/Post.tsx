@@ -212,6 +212,7 @@ const Post = function Post(){
     const { loading, resetLoadingState } = useLoadingState();
     const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
     const date = post && post.date ? regulariseDate(post.date) : ''
+    const userAdmin = user?.member_status === 'admin';
   
     return (
        <>
@@ -221,10 +222,11 @@ const Post = function Post(){
             <Box sx={{display: 'flex', justifyContent: 'center'}}>
                 <CircularProgress size={60}/>
             </Box>)}
-          {post && !loading && (
+          {post && !loading && user && userAdmin && (
               <>
               <Typography component='h1' variant='h4'>{post.title}</Typography>
               <Typography variant='subtitle1' color="text.secondary">{date}</Typography>
+              <Typography variant= 'subtitle1' color="text.secondary">{post.published_status ? 'Published' : 'Unpublished'}</Typography>
               <Typography gutterBottom={true} paragraph={true} sx={{letterSpacing: '0.08rem', lineHeight:'1.75', padding: '1rem', whiteSpace: 'pre-line'}}>
                 {post.content} 
               </Typography>
@@ -241,7 +243,6 @@ const Post = function Post(){
               ) : false}
           <Container>
             <Stack spacing={2} sx={{p:2}}>
-                { (user?.member_status === 'privileged' || user?.member_status === 'admin') &&
                 <Grid container spacing={2} wrap='nowrap'>
                   <Grid item>
                     <Avatar sx={{bgcolor:'#1976d2', width: '30px', height:'30px'}}>{user?.username[0].toUpperCase()}</Avatar>
@@ -252,7 +253,7 @@ const Post = function Post(){
                   <Grid item>
                     <FormDialog {...addCommentProps(postId as string, user._id)}/>
                   </Grid>
-                </Grid>}
+                </Grid>
                 {post.comments.map((comment)=>
                   <Comment _id={comment._id} content={comment.content} date={comment.date} key={comment._id} post={postId as string} user={comment.user} />
                 )}
@@ -261,7 +262,7 @@ const Post = function Post(){
             </Container>  
           </>
           )}
-          {!post && !loading && (<Typography align='center' component='h2' variant='h5'>This post is not available right now.</Typography>)}
+          {!post && !loading && !user && !userAdmin && (<Typography align='center' component='h2' variant='h5'>This post is not available right now.</Typography>)}
         </Container>, resetLoadingState)} 
        </>
     )

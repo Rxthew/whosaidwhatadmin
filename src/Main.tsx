@@ -23,6 +23,7 @@ interface postPreviewProps {
     date: string,
     comments: CommentsType,
     content: string,
+    published_status: boolean,
     title: string
   };
 }
@@ -48,6 +49,9 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
               {date}
+            </Typography>
+            <Typography variant= 'subtitle1' color="text.secondary">
+              {post.published_status ? 'Published' : 'Unpublished'}
             </Typography>
             <Typography variant="subtitle1" paragraph>
               {truncatePostContent(post.content)}
