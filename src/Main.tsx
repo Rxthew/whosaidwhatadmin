@@ -72,13 +72,15 @@ const Main = function(){
 
    const { posts, user } = useIndexData()
    const { loading } = useLoadingState();
-   const onlyPostsNotLoaded = !posts && user && loading === false;
-   const postsAreEmpty = posts && posts.length === 0 && loading === false;
-   const postsAreLoaded = posts && posts.length > 0 && loading === false;
-   const userNotLoaded = !user && loading === false;
-   
    
 
+   const postsNotLoaded = !posts  && !loading;
+   const postsAreEmpty = posts && posts.length === 0 && !loading;
+   const postsAreLoaded = posts && posts.length > 0 && !loading;
+   const userAdmin = user?.member_status === 'admin';
+   const userNotValid = (!user || !userAdmin) && !loading;
+   
+   
     return (
         <>
         <CssBaseline />
@@ -89,23 +91,52 @@ const Main = function(){
                 <CircularProgress size={60}/>
               </Box>
             )}
-            { postsAreLoaded && (
-                <Grid container spacing={4}>
-                  {posts.map(
-                    function convertToPreview(post){
-                      return <PostPreview key={post.title} post={post} />
-                  })}
-                </Grid>
-            )}
-             { postsAreEmpty && (
-            <Typography  align='center' component='h2' variant='h5'>You have not written any posts yet.</Typography>
-            )}
-            { userNotLoaded && (
-              <Typography  align='center' component='h2' variant='h5'>This is the administration frontend for WhoSaidWhat. Please <Link component={MainLink} to={'/login'}>log in</Link> or <Link component={MainLink} to={'/signup'}>sign up</Link> to gain access.</Typography>
+            {
+              userNotValid ?
+               <>
+                {
+                  user || (
+                    <Typography  align='center' component='h2' variant='h5'>
+                      This is the administration frontend for WhoSaidWhat. 
+                      Please 
+                      <Link component={MainLink} to={'/login'}>
+                        log in
+                      </Link> or 
+                      <Link component={MainLink} to={'/signup'}
+                      >sign up
+                      </Link> to gain access.
+                    </Typography>
+                    ) 
+                }
+                {  
+                 userAdmin || (
+                  <Typography  align='center' component='h2' variant='h5'>
+                    It looks like you do not have administrative privileges to access this page. You can 
+                      <Link component={MainLink} to={`user/${user?._id}`}>
+                        update your membership
+                      </Link> to admin to gain access.
+                  </Typography>
+                  )     
+                }
+              </>
+              :
+              <> 
+                { postsAreLoaded && (
+                  <Grid container spacing={4}>
+                    {posts.map(
+                      function convertToPreview(post){
+                        return <PostPreview key={post.title} post={post} />
+                    })}
+                  </Grid>
               )}
-            { onlyPostsNotLoaded && (
-            <Typography  align='center' component='h2' variant='h5'> Posts data has not been retrieved from API.</Typography>
-            )}
+              { postsAreEmpty && (
+              <Typography  align='center' component='h2' variant='h5'>You have not written any posts yet.</Typography>
+              )}
+              { postsNotLoaded && (
+              <Typography  align='center' component='h2' variant='h5'> Posts data has not been retrieved from API.</Typography>
+              )}
+            </>
+            }         
             
           </main>
         </Container>
