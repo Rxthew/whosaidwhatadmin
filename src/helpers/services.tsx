@@ -258,3 +258,221 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
   }  
 };
 
+export const producePostFormProps = function(){
+
+    const addPostProps = function(user: string):FormDialogProps{
+      
+        const button = function(clickHandler: () => void){
+            return (
+            <> 
+                <Button size='small' variant='contained' endIcon={<AddCircleIcon />} sx={{display: {xs:'inline-flex',sm: 'none'}}} onClick={clickHandler}>
+                    Add
+                </Button>
+                <Button size='small' variant='contained' endIcon={<AddCircleIcon />} sx={{display: {xs: 'none', sm:'inline-flex'}}} onClick={clickHandler}>
+                    Add Post
+                </Button>
+            </>
+            )
+        };
+  
+        const inputLabel = 'Add Post';
+        const inputText= 'Create new post.';
+        const titleLabel= 'Add the title of your post'
+        
+        const handleSubmitConstructor = function(params: SubmitConstructorParams){
+  
+            const { resetIndexData, resetLoadingState, setErrors, setNotifications} = params;
+  
+  
+           const notifyAddPostSuccess = function(){
+              setNotifications ? setNotifications({type: 'Add Post'}) : console.error('setNotficiations is null')
+           };
+  
+           const addPostReload = function(){
+              resetLoadingState ? resetLoadingState() : console.error('resetLoadingState is null')
+           };
+           
+  
+            const addPostFetcher = async function(data:string){
+                const response = await fetch("http://localhost:3000/post", { //Update url when ready.
+                  body: data,
+                  credentials: 'include',
+                  headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
+                  method: 'POST', 
+                  mode: 'cors',
+                  redirect: 'follow', 
+                  referrer: window.location.href
+                })
+                const errorStatus = await settleErrors(response,setErrors)
+                return errorStatus && [resetIndexData,addPostReload,notifyAddPostSuccess].map(action => action())
+  
+            };
+  
+            const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
+                event.preventDefault();
+                const rawData = new FormData(event.currentTarget);
+                rawData.append('user',user);
+                const data = JSON.stringify(Object.fromEntries(rawData.entries()));
+                await addPostFetcher(data)
+            
+            };
+  
+            return handleSubmit
+  
+        }
+  
+        return {
+            button, 
+            delete: false,
+            handleSubmitConstructor,
+            inputLabel,
+            inputText,
+            titleLabel
+        }
+  
+    };
+
+    const deletePostProps = function(id: string, userId: string){
+
+        const button = function(clickHandler: () => void){
+            return <Button size='small' variant='text' startIcon={<DeleteIcon />} sx={{mr: 'auto'}} onClick={clickHandler}>Delete post</Button>  
+        };
+  
+        const inputLabel = 'Delete Post';
+        const inputText= 'Be absolutely sure you want to delete this post. Once deleted, it shall be impossible to retrieve.';
+        const submitLabel = 'Delete'
+        
+        
+        const handleSubmitConstructor = function(params: SubmitConstructorParams){
+  
+          const { resetIndexData, resetLoadingState, setErrors, setNotifications} = params;
+  
+          const notifyDeletePostSuccess = function(){
+              setNotifications ? setNotifications({type: 'Delete Post'}) : console.error('setNotficiations is null')
+           };
+           
+           const deletePostReload = function(){
+              resetLoadingState ? resetLoadingState() : console.error('resetLoadingState is null')
+           };
+           
+  
+            const deleteCommentFetcher = async function(data:string){
+                const response = await fetch("http://localhost:3000/post", { //Update url when ready.
+                  body: data,
+                  credentials: 'include',
+                  headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
+                  method: 'DELETE', 
+                  mode: 'cors',
+                  redirect: 'follow', 
+                  referrer: window.location.href
+                })
+                const errorStatus = await settleErrors(response,setErrors)
+                return errorStatus && [resetIndexData, deletePostReload, notifyDeletePostSuccess].map(action => action())
+            }
+  
+            const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
+                event.preventDefault();
+                const _id = id
+                const rawData = new FormData();
+                rawData.append('_id', _id);
+                rawData.append('user', userId);
+                const data = JSON.stringify(Object.fromEntries(rawData.entries()));
+                await deleteCommentFetcher(data);
+                return
+            
+            };
+  
+            return handleSubmit
+            
+        };
+  
+        return  {
+            button, 
+            delete: true,
+            handleSubmitConstructor,
+            inputLabel,
+            inputText,
+            submitLabel
+        }
+        
+  
+    };
+
+
+  const editPostProps = function(modifyingKeys:Record<'id' | 'content' | 'title' | 'userId', string>){
+
+    const {content, id, title, userId} = modifyingKeys;
+
+    const button = function(clickHandler: () => void){
+        return <Button size='small' variant='text' startIcon={<EditIcon />} sx={{mr:'auto'}} onClick={clickHandler}>Edit post</Button>
+    };
+
+    const inputLabel = 'Edit Post';
+    const inputText= 'Edit the content of your post in the field below.';
+    const titleLabel = 'Edit this Post\'s title';
+
+    const handleSubmitConstructor = function(params: SubmitConstructorParams){
+
+        const { resetIndexData, resetLoadingState, setErrors, setNotifications} = params;
+
+        const notifyEditPostSuccess = function(){
+          setNotifications ? setNotifications({type: 'Edit Post'}) : console.error('setNotficiations is null')
+        };   
+
+        const editPostReload = function(){
+          resetLoadingState ? resetLoadingState() : console.error('resetLoadingState is null')
+        };
+
+
+        const editCommentFetcher = async function(data:string){
+            const response = await fetch("http://localhost:3000/post", { //Update url when ready.
+                body: data,
+                credentials: 'include',
+                headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
+                method: 'PUT', 
+                mode: 'cors',
+                redirect: 'follow', 
+                referrer: window.location.href
+            })
+            const errorStatus = await settleErrors(response,setErrors)
+            return errorStatus && [resetIndexData, editPostReload, notifyEditPostSuccess].map(action => action())
+
+        };
+
+        const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
+            event.preventDefault();
+            const rawData = new FormData(event.currentTarget);
+            const _id = id
+            rawData.append('_id', _id);
+            rawData.append('user', userId);
+            const data = JSON.stringify(Object.fromEntries(rawData.entries()));
+            await editCommentFetcher(data)
+        
+        };
+
+        return handleSubmit
+
+    }
+
+
+    return {
+        button,
+        content, 
+        delete: false,
+        handleSubmitConstructor,
+        inputLabel,
+        inputText,
+        title,
+        titleLabel
+    }
+
+};
+  
+    return {
+        addPostProps,
+        deletePostProps,
+        editPostProps
+
+    }
+
+}
