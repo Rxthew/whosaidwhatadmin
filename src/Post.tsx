@@ -2,6 +2,7 @@ import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar'
 import Button from "@mui/material/Button";
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
 import CircularProgress  from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container'
 import Dialog from "@mui/material/Dialog";
@@ -10,6 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
+import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Popover from '@mui/material/Popover';
@@ -26,6 +28,28 @@ import { CommentInterface, FormDialogProps, NotificationReducerInterface } from 
 import { produceCommentFormProps } from './helpers/services';
 import { extractPostById, regulariseDate, restoreOriginalErrorState  } from "./helpers/utils";
 
+
+const PublishedStatusCheckbox = function(){
+  const { postId } = useParams();
+  const { posts } = useIndexData();
+  const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
+  const publishedStatus = post?.published_status || false
+
+
+  const [published, setPublished] = React.useState<boolean>(publishedStatus);
+
+  const handleChange = function(event: React.ChangeEvent<HTMLInputElement>){
+      setPublished(event.target.checked)
+  };
+
+  return(
+    <FormControlLabel 
+    control= {<Checkbox onChange={handleChange} name="published_status" value={published} />}
+    label='Publish'
+    sx={{color: 'grey'}}
+    />
+  )
+}
 
 const FormDialog = function(props: FormDialogProps){
     const [open, setOpen] = React.useState(false);
@@ -72,6 +96,21 @@ const FormDialog = function(props: FormDialogProps){
               (<form id="dialogForm" onSubmit={handleSubmit}></form>) 
                : (
               <form id="dialogForm" onSubmit={handleSubmit}>
+                {props.titleLabel && (
+                 <TextField 
+                autoFocus
+                defaultValue={props.title || ""}
+                fullWidth
+                id="title"
+                margin="dense"
+                name="title"
+                label={props.titleLabel}
+                size="medium"
+                type="text"
+                variant="standard"
+                sx={{whiteSpace:"pre-line"}} 
+                />
+                )} 
                 <TextField 
                 autoFocus
                 defaultValue={props.content || ""}
@@ -87,6 +126,9 @@ const FormDialog = function(props: FormDialogProps){
                 variant="standard"
                 sx={{whiteSpace:"pre-line"}} 
                 />
+                {props.titleLabel &&
+                <PublishedStatusCheckbox />
+                }
               </form>
             )}
           </DialogContent>

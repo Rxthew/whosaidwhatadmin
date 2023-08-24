@@ -19,6 +19,8 @@ export interface FormDialogProps {
     inputText: string,
     content?: string,
     submitLabel?: string,
+    title?: string,
+    titleLabel?: string
   
   }
 
