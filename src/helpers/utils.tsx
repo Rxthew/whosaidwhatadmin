@@ -66,7 +66,10 @@ export const produceDefaultNotificationStatus = function(){
     return {
         'Add Comment Notify': {message: 'Comment successfully added.' ,status: false}, 
         'Delete Comment Notify': {message: 'Comment successfully deleted.' ,status: false}, 
-        'Edit Comment Notify': {message: 'Comment successfully modified.' ,status: false}
+        'Edit Comment Notify': {message: 'Comment successfully modified.' ,status: false},
+        'Add Post Notify': {message: 'Post successfully added.' ,status: false}, 
+        'Delete Post Notify': {message: 'Post successfully deleted.' ,status: false},
+        'Edit Post Notify': {message: 'Post successfully modified.' ,status: false}
     }
    
 };

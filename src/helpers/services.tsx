@@ -10,6 +10,9 @@ export const notificationReducer = function(state: NotificationReducerInterface,
         case 'Add Comment': return Object.assign({}, state, {'Add Comment Notify': {message: state['Add Comment Notify']['message'], status: true}})
         case 'Delete Comment': return Object.assign({}, state, {'Delete Comment Notify': {message: state['Delete Comment Notify']['message'], status: true}})
         case 'Edit Comment': return Object.assign({}, state, {'Edit Comment Notify': {message: state['Edit Comment Notify']['message'] ,status: true}})
+        case 'Add Post': return Object.assign({}, state, {'Add Post Notify': {message: state['Add Post Notify']['message'], status: true}})
+        case 'Delete Post': return Object.assign({}, state, {'Delete Post Notify': {message: state['Delete Post Notify']['message'], status: true}})
+        case 'Edit Post': return Object.assign({}, state, {'Edit Post Notify': {message: state['Edit Post Notify']['message'] ,status: true}})
         case 'Default' : return Object.assign({}, state, produceDefaultNotificationStatus());
     }
 };
@@ -254,3 +257,4 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
       editCommentProps,
   }  
 };
+

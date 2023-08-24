@@ -22,7 +22,7 @@ export interface FormDialogProps {
   
   }
 
-type NotificationActionKeys = 'Add Comment' | 'Delete Comment' | 'Edit Comment' | 'Default'
+type NotificationActionKeys = 'Add Comment' | 'Delete Comment' | 'Edit Comment' | 'Add Post' | 'Delete Post' | 'Edit Post' | 'Default'
 export interface NotificationActionInterface {
     type: NotificationActionKeys,
 }
@@ -36,6 +36,9 @@ export interface NotificationReducerInterface {
     'Add Comment Notify': NotificationStateDetails
     'Delete Comment Notify': NotificationStateDetails   
     'Edit Comment Notify': NotificationStateDetails
+    'Add Post Notify': NotificationStateDetails
+    'Delete Post Notify': NotificationStateDetails   
+    'Edit Post Notify': NotificationStateDetails
     
 }
 
