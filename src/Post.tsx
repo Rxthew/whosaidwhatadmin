@@ -80,8 +80,8 @@ const Comment = function(props: CommentInterface){
           }}
         >
             <Stack sx={{p:1}}>
-              <FormDialog {...editCommentProps({content: props.content, id: props._id, post: props.post, userId: user._id})} />
-              <FormDialog {...deleteCommentProps(props._id, user._id)} />  
+              <FormDialog {...editCommentProps({content: props.content, id: props._id, post: props.post, userId: props.user._id})} />
+              <FormDialog {...deleteCommentProps(props._id, props.user._id)} />  
             </Stack>
           </Popover>
         
@@ -158,8 +158,8 @@ const Post = function Post(){
                   }}
                 >
                     <Stack sx={{p:1}}>
-                      <FormDialog {...editPostProps({id: post._id, content: post.content, title: post.title, userId: user._id})} />
-                      <FormDialog {...deletePostProps(post._id, user._id)} />  
+                      <FormDialog {...editPostProps({id: post._id, content: post.content, title: post.title, userId: post.user._id})} />
+                      <FormDialog {...deletePostProps(post._id, post.user._id)} />  
                     </Stack>
                   </Popover>
                </Grid>                
