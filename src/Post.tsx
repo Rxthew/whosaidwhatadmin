@@ -16,7 +16,7 @@ import { FormDialog, StatusNotification } from './helpers/components';
 import { PostContextProvider } from './helpers/contexts';
 import { useIndexData, useLoadingState } from "./helpers/hooks";
 import { CommentInterface } from "./helpers/types";
-import { produceCommentFormProps } from './helpers/services';
+import { produceCommentFormProps, producePostFormProps } from './helpers/services';
 import { extractPostById, regulariseDate  } from "./helpers/utils";
 
 
@@ -24,7 +24,12 @@ import { extractPostById, regulariseDate  } from "./helpers/utils";
          addCommentProps, 
          deleteCommentProps,
          editCommentProps
-        } = produceCommentFormProps();  
+        } = produceCommentFormProps(); 
+        
+  const {
+        deletePostProps,
+        editPostProps
+        } = producePostFormProps();
  
 
 const Comment = function(props: CommentInterface){ 
@@ -32,12 +37,6 @@ const Comment = function(props: CommentInterface){
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const { user } = useIndexData();
   const date = regulariseDate(props.date);
-  
-  const isUserCommentOwner = user && props.user && user?._id === props.user?._id;
-  const isUserPrivilegedMember = user?.member_status === 'privileged';
-  const isUserPrivilegedOwner = isUserCommentOwner && isUserPrivilegedMember;
-  const isUserAdminMember = user?.member_status === 'admin'; 
-
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -51,15 +50,15 @@ const Comment = function(props: CommentInterface){
 
   return (
   <Box sx={{display: 'flex'}}>
+    {user && (
     <Paper sx={{p:2, flexGrow: '1'}} variant='outlined'>
       <Grid container spacing={6} wrap='nowrap'>
         <Grid item> 
           <Typography variant='overline'>{props.user?.username || 'Anonymous'}:</Typography>      
         </Grid>
         <Grid item>
-          <Typography variant='subtitle1' color='text.secondary'>{date}</Typography>
+          <Typography variant='subtitle1' color='text.secondary'>Last Updated: {date}</Typography>
         </Grid>
-        {(isUserAdminMember || isUserPrivilegedOwner) && (
         <Grid item sx={{ml:'auto'}}>
           <Button onClick={handleClick}>
             <MoreHorizIcon  />
@@ -82,18 +81,18 @@ const Comment = function(props: CommentInterface){
         >
             <Stack sx={{p:1}}>
               <FormDialog {...editCommentProps({content: props.content, id: props._id, post: props.post, userId: user._id})} />
-              <FormDialog {...deleteCommentProps(props._id, user._id)} />      
+              <FormDialog {...deleteCommentProps(props._id, user._id)} />  
             </Stack>
           </Popover>
         
       </Grid>
-      )}
       </Grid>
       <Typography gutterBottom={true} paragraph={true} sx={{whiteSpace:"pre-line"}} >
             {props.content}
       </Typography>  
     </Paper>
-  </Box>    
+    )}
+  </Box>   
   );   
 }; 
 
@@ -101,9 +100,24 @@ const Post = function Post(){
     const { postId } = useParams();
     const { user, posts } = useIndexData();
     const { loading, resetLoadingState } = useLoadingState();
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
     const date = post && post.date ? regulariseDate(post.date) : ''
     const userAdmin = user?.member_status === 'admin';
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    const resetAnchorAndLoad = function(){
+      [handleClose, resetLoadingState].map(action => action())
+   };
+  
+    const open = Boolean(anchorEl);
   
     return (
        <>
@@ -116,8 +130,40 @@ const Post = function Post(){
           {post && !loading && user && userAdmin && (
               <>
               <Typography component='h1' variant='h4'>{post.title}</Typography>
-              <Typography variant='subtitle1' color="text.secondary">{date}</Typography>
-              <Typography variant= 'subtitle1' color="text.secondary">{post.published_status ? 'Published' : 'Unpublished'}</Typography>
+              <Grid container spacing={6} wrap='nowrap'>
+                <Grid item>
+                  <Typography variant='subtitle1' color="text.secondary">Last Updated: {date}</Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant= 'subtitle1' color="text.secondary">{post.published_status ? 'Published' : 'Unpublished'}</Typography>                  
+                </Grid>
+                <Grid item sx={{ml:'auto'}}>
+                  <Button onClick={handleClick}>
+                    <MoreHorizIcon  />
+                  </Button>
+                  <Popover
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                  vertical: 10,
+                  horizontal: 130,
+                  }}
+                  sx={{
+                  cursor: 'pointer'
+                  }}
+                >
+                    <Stack sx={{p:1}}>
+                      <FormDialog {...editPostProps({id: post._id, content: post.content, title: post.title, userId: user._id})} />
+                      <FormDialog {...deletePostProps(post._id, user._id)} />  
+                    </Stack>
+                  </Popover>
+               </Grid>                
+              </Grid>
               <Typography gutterBottom={true} paragraph={true} sx={{letterSpacing: '0.08rem', lineHeight:'1.75', padding: '1rem', whiteSpace: 'pre-line'}}>
                 {post.content} 
               </Typography>
@@ -154,7 +200,7 @@ const Post = function Post(){
           </>
           )}
           {!post && !loading && !user && !userAdmin && (<Typography align='center' component='h2' variant='h5'>This post is not available right now.</Typography>)}
-        </Container>, resetLoadingState)} 
+        </Container>, resetAnchorAndLoad)} 
        </>
     )
 };
