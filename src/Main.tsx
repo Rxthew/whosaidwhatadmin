@@ -11,8 +11,11 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Link as MainLink } from 'react-router-dom';
+import { FormDialog } from './helpers/components';
+import { PostContextProvider } from './helpers/contexts';
 import { useIndexData, useLoadingState } from './helpers/hooks';
-import { CommentsType } from './helpers/types';
+import { producePostFormProps } from './helpers/services';
+import { CommentsType, UserInterface } from './helpers/types';
 import { regulariseDate } from './helpers/utils';
 
 
@@ -27,7 +30,6 @@ interface postPreviewProps {
     title: string
   };
 }
-
 
 const PostPreview = function PostPreview(props: postPreviewProps) {
   const { post } = props;
@@ -71,11 +73,13 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
   );
 }
 
+const { addPostProps } = producePostFormProps();
+
 
 const Main = function(){
 
    const { posts, user } = useIndexData()
-   const { loading } = useLoadingState();
+   const { loading, resetLoadingState } = useLoadingState();
    
 
    const postsNotLoaded = !posts  && !loading;
@@ -86,66 +90,74 @@ const Main = function(){
    
    
     return (
-        <>
-        <CssBaseline />
-        <Container maxWidth="lg" sx={{py:4}}>
-          <main>
-            { loading && (
-              <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                <CircularProgress size={60}/>
-              </Box>
-            )}
-            {
-              userNotValid ?
-               <>
-                {
-                  user || (
+      <>
+        {PostContextProvider(        
+          <>
+          <CssBaseline />
+          <Container maxWidth="lg" sx={{py:4}}>
+            <main>
+              { loading && (
+                <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                  <CircularProgress size={60}/>
+                </Box>
+              )}
+              {
+                userNotValid ?
+                <>
+                  {
+                    user || (
+                      <Typography  align='center' component='h2' variant='h5'>
+                        This is the administration frontend for WhoSaidWhat.
+                        Please <Link component={MainLink} to={'/login'}>
+                            log in
+                        </Link> or 
+                        <Link component={MainLink} to={'/signup'}
+                        > sign up
+                        </Link> to gain access.
+                      </Typography>
+                      ) 
+                  }
+                  {  
+                    !user || userAdmin || (
                     <Typography  align='center' component='h2' variant='h5'>
-                      This is the administration frontend for WhoSaidWhat.
-                      Please <Link component={MainLink} to={'/login'}>
-                           log in
-                       </Link> or 
-                      <Link component={MainLink} to={'/signup'}
-                      > sign up
-                      </Link> to gain access.
+                      It looks like you do not have administrative privileges to access this page.
+                      You can <Link component={MainLink} to={`user/${user?._id}`}>
+                          update your membership
+                        </Link> to admin to gain access.
                     </Typography>
-                    ) 
-                }
-                {  
-                  !user || userAdmin || (
-                  <Typography  align='center' component='h2' variant='h5'>
-                    It looks like you do not have administrative privileges to access this page.
-                    You can <Link component={MainLink} to={`user/${user?._id}`}>
-                        update your membership
-                      </Link> to admin to gain access.
-                  </Typography>
-                  )     
-                }
+                    )     
+                  }
+                </>
+                :
+                <> 
+                  { postsAreLoaded && (
+                    <Grid container spacing={4}>
+                      <Grid item sx={{minWidth: '100%'}}>
+                        <Box sx={{float: 'right'}}>
+                          <FormDialog {...addPostProps((user as UserInterface)._id)}/>
+                        </Box>
+                      </Grid>
+                      {posts.map(
+                        function convertToPreview(post){
+                          return <PostPreview key={post.title} post={post} />
+                      })}
+                    </Grid>
+                )}
+                { postsAreEmpty && (
+                <Typography  align='center' component='h2' variant='h5'>You have not written any posts yet.</Typography>
+                )}
+                { postsNotLoaded && (
+                <Typography  align='center' component='h2' variant='h5'> Posts data has not been retrieved from API.</Typography>
+                )}
               </>
-              :
-              <> 
-                { postsAreLoaded && (
-                  <Grid container spacing={4}>
-                    {posts.map(
-                      function convertToPreview(post){
-                        return <PostPreview key={post.title} post={post} />
-                    })}
-                  </Grid>
-              )}
-              { postsAreEmpty && (
-              <Typography  align='center' component='h2' variant='h5'>You have not written any posts yet.</Typography>
-              )}
-              { postsNotLoaded && (
-              <Typography  align='center' component='h2' variant='h5'> Posts data has not been retrieved from API.</Typography>
-              )}
-            </>
-            }         
-            
-          </main>
-        </Container>
-        
-        </>
-    )
+              }         
+              
+            </main>
+          </Container>  
+          </>
+        , resetLoadingState)}
+      </>     
+  )
 
 }
 
