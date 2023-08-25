@@ -34,7 +34,7 @@ const PublishedStatusCheckbox = function(){
   
     return(
       <FormControlLabel 
-      control= {<Checkbox onChange={handleChange} name="published_status" value={published} />}
+      control= {<Checkbox defaultChecked={published} onChange={handleChange} name="published_status" value={published} />}
       label='Publish'
       sx={{color: 'grey'}}
       />
