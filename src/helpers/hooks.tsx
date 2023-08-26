@@ -58,8 +58,8 @@ export const useFetchIndexData = function(){
                 method: 'GET', 
                 mode: 'cors',
                 signal: abortFetch.signal
-              })
-            return response.ok ?  setFreshIndexData(await response.json()) : false
+              }).catch((err:Error) => {throw err})
+            return response.ok ?  setFreshIndexData(await response.json().catch((err:Error)=>{console.error(err)})) : false
         };
 
         checkIfDataIsNull() && fetchData()

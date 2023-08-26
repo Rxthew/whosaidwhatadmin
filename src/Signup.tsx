@@ -27,8 +27,8 @@ const Signup = function Signup(){
       mode: 'cors',
       redirect: 'follow', 
       referrer: window.location.href
-    })
-    const errorStatus = await settleErrors(response,setErrors)
+    }).catch((err:Error)=>{throw err})
+    const errorStatus = await settleErrors(response,setErrors).catch((err:Error)=>{throw err})
     return errorStatus && [resetIndexData, redirectToOrigin].map((action)=> action());
     }
       
@@ -36,7 +36,7 @@ const Signup = function Signup(){
         event.preventDefault();
         const rawData = new FormData(event.currentTarget);
         const data = JSON.stringify(Object.fromEntries(rawData.entries()));
-        await signUpFetcher(data)
+        await signUpFetcher(data).catch((err:Error)=>{console.error(err)})
       };
     
       return (

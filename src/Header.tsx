@@ -41,7 +41,7 @@ export default function Header(props:HeaderProps) {
         credentials: 'include',
         method: 'POST', 
         mode: 'cors',
-      })
+      }).catch((err:Error)=>{throw err})
     return response.ok ?  [resetIndexData, redirectToOrigin].map((action)=> action()) : console.error(response.statusText)
 };
 

@@ -28,9 +28,9 @@ import { handleStatus401 } from './helpers/utils';
         mode: 'cors',
         redirect: 'follow', 
         referrer: window.location.href
-      })
+      }).catch((err:Error)=>{throw err})
       const updatedResponse = handleStatus401(response);
-      const errorStatus = await settleErrors(updatedResponse,setErrors)
+      const errorStatus = await settleErrors(updatedResponse,setErrors).catch((err:Error)=>{throw err})
       return errorStatus && [resetIndexData, redirectToOrigin].map((action)=> action());
     }
 
@@ -38,7 +38,7 @@ import { handleStatus401 } from './helpers/utils';
         event.preventDefault();
         const rawData = new FormData(event.currentTarget);
         const data = JSON.stringify(Object.fromEntries(rawData.entries()));
-        await loginFetcher(data);
+        await loginFetcher(data).catch((err:Error)=>{console.error(err)});
     };
 
       return (
