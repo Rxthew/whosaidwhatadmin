@@ -54,7 +54,7 @@ const Comment = function(props: CommentInterface){
     <Paper sx={{p:2, flexGrow: '1'}} variant='outlined'>
       <Grid container spacing={6} wrap='nowrap'>
         <Grid item> 
-          <Typography variant='overline'>{props.user?.username || 'Anonymous'}:</Typography>      
+          <Typography variant='overline'>{props.user?.username}:</Typography>      
         </Grid>
         <Grid item>
           <Typography variant='subtitle1' color='text.secondary'>Last Updated: {date}</Typography>
@@ -131,6 +131,9 @@ const Post = function Post(){
               <>
               <Typography component='h1' variant='h4'>{post.title}</Typography>
               <Grid container spacing={6} wrap='nowrap'>
+              <Grid item> 
+                <Typography variant='subtitle1' color="text.secondary">Written by: {post.user?.username}:</Typography>      
+              </Grid>              
                 <Grid item>
                   <Typography variant='subtitle1' color="text.secondary">Last Updated: {date}</Typography>
                 </Grid>
