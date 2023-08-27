@@ -83,7 +83,7 @@ export default function Header(props:HeaderProps) {
           >
             <MenuIcon />
           </IconButton>
-          <Link component={HeaderLink} to={'/'} color="inherit" sx={{flexGrow: 1}}> 
+          <Link component={HeaderLink} to={'/'} color="inherit"  sx={{flexGrow: 1, textDecoration: "none" }}> 
               <Typography
                 component="h1"
                 variant="h2"
@@ -95,7 +95,7 @@ export default function Header(props:HeaderProps) {
                 Who Said What
               </Typography>
             </Link>
-            <Link component={HeaderLink} to={'/'} color="inherit" sx={{flexGrow: 1}}>
+            <Link component={HeaderLink} to={'/'} color="inherit"  sx={{flexGrow: 1, textDecoration: "none" }}>
               <Typography
                 component="h1"
                 variant="h3"
