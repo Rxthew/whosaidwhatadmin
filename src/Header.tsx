@@ -36,7 +36,7 @@ export default function Header(props:HeaderProps) {
 
 
   const handleLogout= async function(){
-    const response = await fetch("http://localhost:3000/logout", { //Update url when ready.
+    const response = await fetch("https://wswapi.onrender.com/logout", { 
         headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
         credentials: 'include',
         method: 'POST', 

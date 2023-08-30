@@ -20,7 +20,7 @@ import { handleStatus401 } from './helpers/utils';
    const { resetIndexData } = useIndexData();
 
     const loginFetcher = async function(data:string){
-      const response = await fetch("http://localhost:3000/login", { //Update url when ready.
+      const response = await fetch("https://wswapi.onrender.com/login", { 
         body: data,
         credentials: 'include',
         headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},

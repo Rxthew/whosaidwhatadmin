@@ -37,7 +37,7 @@ const DeleteUserDialog = function(){
 
   const deleteUserFetcher = async function(){
     const userId = user?._id;
-    const response = await fetch(`http://localhost:3000/user/${userId}`, {  //Update url when ready.
+    const response = await fetch(`https://wswapi.onrender.com/user/${userId}`, {  
      credentials: 'include',
      headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
      method: 'DELETE', 
@@ -106,7 +106,7 @@ const User = function User(){
 
   const updateUserFetcher = async function(data:string){
        const userId = user?._id;
-       const response = await fetch(`http://localhost:3000/user/${userId}`, {  //Update url when ready.
+       const response = await fetch(`https://wswapi.onrender.com/user/${userId}`, {  
         body: data,
         credentials: 'include',
         headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},

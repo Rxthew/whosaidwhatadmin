@@ -52,7 +52,7 @@ export const useFetchIndexData = function(){
         const abortFetch = new AbortController();
 
         const fetchData = async function(){
-            const response = await fetch("http://localhost:3000/admin", { //Update url when ready.
+            const response = await fetch("https://wswapi.onrender.com/admin", { 
                 headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
                 credentials: 'include',
                 method: 'GET', 

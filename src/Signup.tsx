@@ -19,7 +19,7 @@ const Signup = function Signup(){
   const { resetIndexData } = useIndexData();
 
   const signUpFetcher = async function(data:string){
-    const response = await fetch("http://localhost:3000/signup", { //Update url when ready.
+    const response = await fetch("https://wswapi.onrender.com/signup", { //Update url when ready.
       body: data, 
       credentials: 'include',
       headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
