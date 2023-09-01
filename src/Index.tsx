@@ -39,7 +39,9 @@ const blogRouter = createBrowserRouter([{
     }
 
   ]
-}])
+}], {
+  basename: '/whosaidwhatadmin/'
+})
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
