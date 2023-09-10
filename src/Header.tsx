@@ -53,16 +53,18 @@ export default function Header(props:HeaderProps) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-         Actions
+         Available Actions
       </Typography>
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+          <ListItem key={item} disablePadding sx={{justifyContent: "center"}}>
+          <Link component={HeaderLink} to={`/${item.replace(' ','').toLowerCase()}`} color="inherit" sx={{ textAlign: "center", textDecoration: "none" }}>
+            <ListItemButton>
               <ListItemText primary={item} />
             </ListItemButton>
-          </ListItem>
+          </Link>    
+        </ListItem>
         ))}
       </List>
     </Box>
