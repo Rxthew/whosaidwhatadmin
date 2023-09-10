@@ -17,9 +17,9 @@ export const notificationReducer = function(state: NotificationReducerInterface,
     }
 };
 
-export const redirectToOrigin = function(){
-    return window.location.href = window.location.origin;
-};
+export const redirectToOrigin = function () {
+    return (window.location.href = `${window.location.origin}/whosaidwhatadmin/`);
+  };
 
 export const settleErrors = async function(res:Response, setErrors:React.Dispatch<React.SetStateAction<Record<string,Record<string, string | boolean>>>>){
       
