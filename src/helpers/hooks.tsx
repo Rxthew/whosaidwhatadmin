@@ -80,20 +80,21 @@ export const useIndexData = function(){
     return useOutletContext<IndexInterface>()
 };
 
-export const useLoadingState = function(){
+export const useLoadingState = function(posts?: PostsType | null){
     const [loading, setLoading] = useState<boolean>(true);
     const resetLoadingState = function(){
         setLoading(true)
     }
 
     useEffect(()=>{
-        const timeout = loading ? setTimeout(()=>{setLoading(false)},2250) : null
+        const timeout = loading ? setTimeout(()=>{setLoading(false)},60000) : null
+        posts ? setLoading(false) : null;
 
         return () => {
             timeout === null ? null : clearTimeout(timeout)
         }
 
-    },[loading])
+    },[loading,posts])
 
     return {loading, resetLoadingState}
 };

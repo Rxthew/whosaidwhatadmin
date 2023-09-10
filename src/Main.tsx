@@ -79,7 +79,7 @@ const { addPostProps } = producePostFormProps();
 const Main = function(){
 
    const { posts, user } = useIndexData()
-   const { loading, resetLoadingState } = useLoadingState();
+   const { loading, resetLoadingState } = useLoadingState(posts);
    
 
    const postsNotLoaded = !posts  && !loading;
