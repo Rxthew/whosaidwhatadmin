@@ -17,7 +17,7 @@ export const useErrorStates = function (errorParameters: string[]) {
 
 export const useFetchIndexData = function () {
   const [user, setUser] = useState<UserInterface | null>(null);
-  const [posts, setPosts] = useState<PostsType | null>(null);
+  const [posts, setPosts] = useState<PostsType | false | null>(null);
 
   const resetIndexData = function hardReset() {
     setPosts(() => null);
@@ -25,6 +25,7 @@ export const useFetchIndexData = function () {
   };
 
   useEffect(() => {
+  
     const checkIfDataIsNull = function () {
       return posts === null && user === null;
     };
@@ -66,15 +67,15 @@ export const useFetchIndexData = function () {
         mode: "cors",
         signal: abortFetch.signal,
       }).catch((err: Error) => {
-        throw err;
+        console.error(err)
       });
-      return response.ok
+      return response 
         ? setFreshIndexData(
             await response.json().catch((err: Error) => {
               console.error(err);
             })
           )
-        : false;
+        : setPosts(false);
     };
 
     checkIfDataIsNull() && fetchData();
@@ -103,7 +104,7 @@ export const useLoadingState = function (posts?: PostsType | null) {
           setLoading(false);
         }, 60000)
       : null;
-    posts ? setLoading(false) : null;
+    posts !== null ? setLoading(false) : null;
 
     return () => {
       timeout === null ? null : clearTimeout(timeout);
