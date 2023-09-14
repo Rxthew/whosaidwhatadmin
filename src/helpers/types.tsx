@@ -79,8 +79,8 @@ export interface UserInterface {
 
 export interface IndexInterface {
   user: UserInterface | null;
-  posts: PostsType | null;
+  posts: PostsType | false | null;
   resetIndexData: () => void;
   setUser: React.Dispatch<React.SetStateAction<UserInterface | null>>;
-  setPosts: React.Dispatch<React.SetStateAction<PostsType | null>>;
+  setPosts: React.Dispatch<React.SetStateAction<PostsType | false | null>>;
 }

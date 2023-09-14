@@ -25,7 +25,6 @@ const Signup = function Signup() {
 
   const signUpFetcher = async function (data: string) {
     const response = await fetch("https://wswapi.onrender.com/signup", {
-      //Update url when ready.
       body: data,
       credentials: "include",
       headers: {

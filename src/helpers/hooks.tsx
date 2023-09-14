@@ -92,7 +92,7 @@ export const useIndexData = function () {
   return useOutletContext<IndexInterface>();
 };
 
-export const useLoadingState = function (posts?: PostsType | null) {
+export const useLoadingState = function (posts?: PostsType | false | null) {
   const [loading, setLoading] = useState<boolean>(true);
   const resetLoadingState = function () {
     setLoading(true);
