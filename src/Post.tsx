@@ -48,16 +48,28 @@ const Comment = function (props: CommentInterface) {
     <Box sx={{ display: "flex" }}>
       {user && (
         <Paper sx={{ p: 2, flexGrow: "1" }} variant="outlined">
-          <Grid container spacing={6} wrap="nowrap">
-            <Grid item>
-              <Typography variant="overline">
-                {props.user?.username}:
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="subtitle1" color="text.secondary">
-                Last Updated: {date}
-              </Typography>
+          <Grid
+            container
+            rowSpacing={{ xs: 2, sm: 3 }}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            wrap="nowrap"
+          >
+            <Grid
+              container
+              item
+              spacing={{ xs: 1, sm: 2, md: 3 }}
+              wrap="wrap-reverse"
+            >
+              <Grid item>
+                <Typography variant="overline" sx={{ wordBreak: "break-word" }}>
+                  {props.user?.username}:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="subtitle1" color="text.secondary">
+                  Last Updated: {date}
+                </Typography>
+              </Grid>
             </Grid>
             <Grid item sx={{ ml: "auto" }}>
               <Button onClick={handleClick}>
@@ -145,24 +157,39 @@ const Post = function Post() {
           )}
           {post && !loading && user && userAdmin && (
             <>
-              <Typography component="h1" variant="h4">
+              <Typography
+                component="h1"
+                variant="h4"
+                sx={{ wordWrap: "break-word" }}
+              >
                 {post.title}
               </Typography>
-              <Grid container spacing={6} wrap="nowrap">
-                <Grid item>
-                  <Typography variant="subtitle1" color="text.secondary">
-                    Written by: {post.user?.username}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant="subtitle1" color="text.secondary">
-                    Last Updated: {date}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant="subtitle1" color="text.secondary">
-                    {post.published_status ? "Published" : "Unpublished"}
-                  </Typography>
+              <Grid container spacing={{ xs: 2, sm: 4, md: 6 }} wrap="nowrap">
+                <Grid
+                  container
+                  item
+                  wrap="wrap-reverse"
+                  spacing={{ xs: 1, sm: 2, md: 3 }}
+                >
+                  <Grid item>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      sx={{ wordWrap: "break-word" }}
+                    >
+                      Written by: {post.user?.username}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="subtitle1" color="text.secondary">
+                      Last Updated: {date}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="subtitle1" color="text.secondary">
+                      {post.published_status ? "Published" : "Unpublished"}
+                    </Typography>
+                  </Grid>
                 </Grid>
                 <Grid item sx={{ ml: "auto" }}>
                   <Button onClick={handleClick}>
@@ -233,6 +260,7 @@ const Post = function Post() {
                           bgcolor: "#1976d2",
                           width: "30px",
                           height: "30px",
+                          wordWrap: "break-word",
                         }}
                       >
                         {user?.username[0].toUpperCase()}

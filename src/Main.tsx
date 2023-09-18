@@ -50,7 +50,11 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
           <CardContent
             sx={{ display: "flex", flexDirection: "column", minWidth: "100%" }}
           >
-            <Typography component="h2" variant="h5">
+            <Typography
+              component="h2"
+              variant="h5"
+              sx={{ wordWrap: "break-word" }}
+            >
               {post.title}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">

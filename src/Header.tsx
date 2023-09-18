@@ -133,7 +133,9 @@ export default function Header(props: HeaderProps) {
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
               {username ? (
                 <>
-                  <Typography>Welcome {username}</Typography>
+                  <Typography sx={{ wordWrap: "break-word" }}>
+                    Welcome {username}
+                  </Typography>
                   <Link
                     component={HeaderLink}
                     to={`/user/${props.user?._id}`}
