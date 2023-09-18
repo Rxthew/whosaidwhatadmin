@@ -41,9 +41,15 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
 
   return (
     <Grid item xs={12} md={6}>
-      <CardActionArea component={MainLink} to={`/post/${post._id}`}>
-        <Card sx={{ display: "flex" }}>
-          <CardContent sx={{ flex: 1 }}>
+      <CardActionArea
+        component={MainLink}
+        to={`/post/${post._id}`}
+        sx={{ display: "flex", alignItems: "stretch", minHeight: "100%" }}
+      >
+        <Card sx={{ display: "flex", minWidth: "100%" }}>
+          <CardContent
+            sx={{ display: "flex", flexDirection: "column", minWidth: "100%" }}
+          >
             <Typography component="h2" variant="h5">
               {post.title}
             </Typography>
@@ -53,7 +59,7 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
             <Typography variant="subtitle1" color="text.secondary">
               {post.published_status ? "Published" : "Unpublished"}
             </Typography>
-            <Typography variant="subtitle1" paragraph>
+            <Typography variant="subtitle1" paragraph sx={{ flexGrow: 1 }}>
               {truncatePostContent(post.content)}
             </Typography>
             <Grid sx={{ display: "flex" }} justifyContent="space-between">
